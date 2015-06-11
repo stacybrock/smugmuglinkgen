@@ -19,6 +19,7 @@ API_KEY = config.get('main', 'api_key')
 API_SECRET = config.get('main', 'api_secret')
 TOKEN = config.get('main', 'token')
 SECRET = config.get('main', 'secret')
+USERNAME = config.get('main', 'smugmug_user')
 
 # set up smugmug API
 smugmug = SmugMug(api_key=API_KEY, oauth_secret=API_SECRET, app_name="get_gallery_links")
@@ -37,7 +38,7 @@ else:
     print "Enter these values into smugmuglinkgen.conf to skip this auth process the next time around."
 
 # the real work starts here
-albums = smugmug.albums_get(NickName='tbolt')
+albums = smugmug.albums_get(NickName=USERNAME)
 for album in albums['Albums']:
     if args.list:
         print album['Title']

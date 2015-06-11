@@ -6,11 +6,11 @@ A python script to generate links to images in a SmugMug album.
 
 Developed in python 2.7
 
-First, set up your environment as per `requirements.txt`.
-
-Then, apply for a SmugMug API key: https://api.smugmug.com/api/developer/apply
-
-Enter the API_KEY and API_SECRET into `smugmuglinkgen.conf`.
+1. Set up environment using `requirements.txt`.
+1. Copy `smugmuglinkgen.conf-dist` to `smugmuglinkgen.conf`.
+1. Edit `smugmuglinkgen.conf` and change `smugmug_user` to your SmugMug username.
+1. Apply for a SmugMug API key: https://api.smugmug.com/api/developer/apply
+1. Edit `smugmuglinkgen.conf` and update `api_key` and `api_secret` with the correct values.
 
 ## Usage
 
