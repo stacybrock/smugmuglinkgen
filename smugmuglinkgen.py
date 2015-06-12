@@ -1,16 +1,23 @@
-import os, ConfigParser, argparse
+"""smugmuglinkgen.py
+
+Usage:
+    smugmuglinkgen.py list
+    smugmuglinkgen.py album <albumname> generate ( links | figures | bbcode )
+    smugmuglinkgen.py (-h | --help)
+    smugmuglinkgen.py --version
+
+Options:
+    -h --help     Show this screen.
+    --version     Show version.
+"""
+import os, ConfigParser
+from docopt import docopt
 from smugpy import SmugMug
 
 SCRIPTPATH = os.path.dirname(os.path.abspath(__file__))
 
 # parse command line arguments
-parser = argparse.ArgumentParser(description='Generate links from images in a SmugMug album.')
-parser.add_argument('-a', '--album', type=str, help="name of target album")
-parser.add_argument('-l', '--list', help="list available albums", action="store_true")
-parser.add_argument('-f', '--figure', help="wrap with <figure> tags", action="store_true")
-args = parser.parse_args()
-if not args.album:
-    parser.error("--album argument required")
+arguments = docopt(__doc__, version='smugmuglinkgen.py 0.1')
 
 # parse config file
 config = ConfigParser.ConfigParser()
@@ -40,19 +47,25 @@ else:
 # the real work starts here
 albums = smugmug.albums_get(NickName=USERNAME)
 for album in albums['Albums']:
-    if args.list:
+    if arguments['list']:
         print album['Title']
     else:
-        if args.album in album['Title']:
+        if arguments['<albumname>'] in album['Title']:
             print("Processing %s, %s" % (album['id'], album['Title']))
             images = smugmug.images_get(AlbumID=album['id'], AlbumKey=album['Key'], Heavy=True)
             for image in images['Album']['Images']:
-                if image['Width'] > image['Height']:
-                    output = '<a href="%s"><img src="%s"/></a>' % (image['OriginalURL'], image['MediumURL'])
-                else:
-                    output = '<a href="%s"><img src="%s"/></a>' % (image['OriginalURL'], image['LargeURL'])
+                original_url = image['OriginalURL']
 
-                if args.figure:
-                    output = '<figure>%s</figure>' % output
+                if image['Width'] > image['Height']:
+                    display_url = image['MediumURL']
+                else:
+                    display_url = image['LargeURL']
+
+                if arguments['bbcode']:
+                    output = '[url=%s][img]%s[/img][/url]' % (original_url, display_url)
+                else:
+                    output = '<a href="%s"><img src="%s"/></a>' % (original_url, display_url)
+                    if arguments['figures']:
+                        output = '<figure>%s</figure>' % output
 
                 print output
