@@ -15,15 +15,15 @@ Developed in python 2.7
 ## Usage
 
 ```
-usage: smugmuglinkgen.py [-h] [-a ALBUM] [-l] [-f]
+smugmuglinkgen.py
 
-Generate links to images in a SmugMug album.
+Usage:
+    smugmuglinkgen.py list
+    smugmuglinkgen.py album <albumname> generate ( links | figures | bbcode )
+    smugmuglinkgen.py (-h | --help)
+    smugmuglinkgen.py --version
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -a ALBUM, --album ALBUM
-                        name of target album
-  -l, --list            list available albums
-  -f, --figure          wrap with <figure> tags
+Options:
+    -h --help     Show this screen.
+    --version     Show version.
 ```
-
