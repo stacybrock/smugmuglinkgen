@@ -4,7 +4,7 @@ A python script to generate links to images in a SmugMug album.
 
 ## Requirements
 
-Developed in python 2.7
+Developed for python 3.6.x
 
 1. Set up environment using `requirements.txt`.
 1. Copy `smugmuglinkgen.conf-dist` to `smugmuglinkgen.conf`.

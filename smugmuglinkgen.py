@@ -10,9 +10,12 @@ Options:
     -h --help     Show this screen.
     --version     Show version.
 """
-import os, ConfigParser
+import os, configparser
 from docopt import docopt
 from smugpy import SmugMug
+import pprint
+
+pp = pprint.PrettyPrinter(indent=2)
 
 SCRIPTPATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -20,7 +23,7 @@ SCRIPTPATH = os.path.dirname(os.path.abspath(__file__))
 arguments = docopt(__doc__, version='smugmuglinkgen.py 0.1')
 
 # parse config file
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read(SCRIPTPATH+'/smugmuglinkgen.conf')
 API_KEY = config.get('main', 'api_key')
 API_SECRET = config.get('main', 'api_secret')
@@ -42,13 +45,13 @@ else:
     response = smugmug.auth_getAccessToken()
     print("  token: %s" % response['Auth']['Token']['id'])
     print("  secret: %s" % response['Auth']['Token']['Secret'])
-    print "Enter these values into smugmuglinkgen.conf to skip this auth process the next time around."
+    print("Enter these values into smugmuglinkgen.conf to skip this auth process the next time around.")
 
 # the real work starts here
 albums = smugmug.albums_get(NickName=USERNAME)
 for album in albums['Albums']:
     if arguments['list']:
-        print album['Title']
+        print(album['Title'])
     else:
         if arguments['<albumname>'] in album['Title']:
             print("Processing %s, %s" % (album['id'], album['Title']))
@@ -57,9 +60,9 @@ for album in albums['Albums']:
                 original_url = image['OriginalURL']
 
                 if image['Width'] > image['Height']:
-                    display_url = image['MediumURL']
+                    display_url = image['XLargeURL']
                 else:
-                    display_url = image['LargeURL']
+                    display_url = image['X2LargeURL']
 
                 if arguments['bbcode']:
                     output = '[url=%s][img]%s[/img][/url]' % (original_url, display_url)
@@ -68,4 +71,4 @@ for album in albums['Albums']:
                     if arguments['figures']:
                         output = '<figure>%s</figure>' % output
 
-                print output
+                print(output)
